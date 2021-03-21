@@ -75,8 +75,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.65
   m_SuspensionSpring:
-    spring: 80000
-    damper: 8000
+    spring: 90000
+    damper: 9000
     targetPosition: 1
   m_SuspensionDistance: 0.08
   m_ForceAppPointDistance: 0
@@ -93,7 +93,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_Enabled: 1
 --- !u!1 &3369859044558715880
 GameObject:
@@ -170,8 +170,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.65
   m_SuspensionSpring:
-    spring: 80000
-    damper: 8000
+    spring: 90000
+    damper: 9000
     targetPosition: 1
   m_SuspensionDistance: 0.08
   m_ForceAppPointDistance: 0
@@ -188,7 +188,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_Enabled: 1
 --- !u!1 &6342948289265581041
 GameObject:
@@ -215,7 +215,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6342948289265581041}
-  m_LocalRotation: {x: -0, y: 0.5229376, z: -0, w: 0.8523709}
+  m_LocalRotation: {x: 0, y: 0.5229375, z: 0, w: 0.8523711}
   m_LocalPosition: {x: -134.08, y: 2.59, z: 38.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -233,8 +233,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6342948289265581041}
   serializedVersion: 2
-  m_Mass: 1300
-  m_Drag: 0.1
+  m_Mass: 1500
+  m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -754,8 +754,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.65
   m_SuspensionSpring:
-    spring: 80000
-    damper: 8000
+    spring: 90000
+    damper: 9000
     targetPosition: 1
   m_SuspensionDistance: 0.08
   m_ForceAppPointDistance: 0
@@ -772,7 +772,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_Enabled: 1
 --- !u!1 &8628522548881342719
 GameObject:
@@ -815,8 +815,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.65
   m_SuspensionSpring:
-    spring: 80000
-    damper: 8000
+    spring: 90000
+    damper: 9000
     targetPosition: 1
   m_SuspensionDistance: 0.08
   m_ForceAppPointDistance: 0
@@ -833,5 +833,5 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_Enabled: 1
