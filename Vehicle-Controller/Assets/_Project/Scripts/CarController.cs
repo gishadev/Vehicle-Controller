@@ -5,43 +5,55 @@ namespace Gisha.VehiclePrototype
     public class CarController : MonoBehaviour
     {
         [Header("General")]
-        [SerializeField] private float topSpeed = 150f;
         [SerializeField] private float motorForce;
+        [SerializeField] private float brakeForce;
         [SerializeField] private float maxSteerAngle;
 
         [Header("Wheels")]
-        [SerializeField] private GameObject[] wheels;
+        [SerializeField] private Transform[] wheelTransforms;
         [SerializeField] private WheelCollider[] wheelColliders;
 
-        Rigidbody _rigidbody;
-
-        private void Awake()
-        {
-            _rigidbody = GetComponent<Rigidbody>();
-        }
+        float _horizontalInput, _verticalInput;
+        bool _isHandBraking;
 
         private void FixedUpdate()
         {
-            float h = Input.GetAxis("Horizontal");
-            float v = Input.GetAxis("Vertical");
+            GetInput();
 
-            Steer(h);
-            Accelerate(v);
+            Steer();
+            HandleMotor();
 
             UpdateWheelPoses();
         }
 
-        private void Accelerate(float accel)
+        private void GetInput()
         {
-            // 2 and 3 are rear wheels.
-            wheelColliders[2].motorTorque = accel * motorForce;
-            wheelColliders[3].motorTorque = accel * motorForce;
+            _horizontalInput = Input.GetAxis("Horizontal");
+            _verticalInput = Input.GetAxis("Vertical");
+            _isHandBraking = Input.GetKey(KeyCode.Space);
         }
 
-        private void Steer(float steering)
+        private void HandleMotor()
         {
             // 0 and 1 are front wheels.
-            float steerAngle = steering * maxSteerAngle;
+            wheelColliders[0].motorTorque = _verticalInput * motorForce;
+            wheelColliders[1].motorTorque = _verticalInput * motorForce;
+
+            ApplyBraking();
+        }
+
+        private void ApplyBraking()
+        {
+            float brakeInput = _isHandBraking ? 1f : 0f;
+
+            for (int i = 0; i < 4; i++)
+                wheelColliders[i].brakeTorque = brakeInput * brakeForce;
+        }
+
+        private void Steer()
+        {
+            // 0 and 1 are front wheels.
+            float steerAngle = _horizontalInput * maxSteerAngle;
             wheelColliders[0].steerAngle = steerAngle;
             wheelColliders[1].steerAngle = steerAngle;
         }
@@ -51,8 +63,8 @@ namespace Gisha.VehiclePrototype
             for (int i = 0; i < 4; i++)
             {
                 wheelColliders[i].GetWorldPose(out Vector3 pos, out Quaternion quat);
-                wheels[i].transform.rotation = quat;
-                wheels[i].transform.position = pos;
+                wheelTransforms[i].rotation = quat;
+                wheelTransforms[i].position = pos;
             }
         }
     }
