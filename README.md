@@ -1,4 +1,5 @@
 # Vehicle Controller
+### Made with **Unity 2020.2.1f1**
  
 I was interested in how wheel colliders work, so here is my prototype.
 
@@ -16,5 +17,3 @@ I was interested in how wheel colliders work, so here is my prototype.
 ## Used assets from [Unity Asset Store](https://assetstore.unity.com/)
 * [Race Track](https://assetstore.unity.com/packages/3d/environments/roadways/race-tracks-140501)
 * [Car](https://assetstore.unity.com/packages/3d/vehicles/land/modern-sports-car-2-2197)
-
-### Unity version: **2020.2.1f1**
