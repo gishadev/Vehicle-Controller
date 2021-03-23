@@ -6,6 +6,7 @@ namespace Gisha.VehiclePrototype
     {
         [Header("General")]
         [SerializeField] private float motorForce;
+        [SerializeField] private float reverseMotorForce;
         [SerializeField] private float brakeForce;
         [SerializeField] private float maxSteerAngle;
 
@@ -15,6 +16,13 @@ namespace Gisha.VehiclePrototype
 
         float _horizontalInput, _verticalInput;
         bool _isHandBraking;
+
+        Rigidbody rb;
+
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+        }
 
         private void FixedUpdate()
         {
@@ -35,19 +43,30 @@ namespace Gisha.VehiclePrototype
 
         private void HandleMotor()
         {
-            // 0 and 1 are front wheels.
-            wheelColliders[0].motorTorque = _verticalInput * motorForce;
-            wheelColliders[1].motorTorque = _verticalInput * motorForce;
+            float footbrake = -1 * Mathf.Clamp(_verticalInput, -1, 0);
+            float handbrake = _isHandBraking ? 1f : 0f;
 
-            ApplyBraking();
-        }
-
-        private void ApplyBraking()
-        {
-            float brakeInput = _isHandBraking ? 1f : 0f;
+            if (handbrake > 0f)
+            {
+                // 2 and 3 are rear wheels.
+                var brakeTorque = handbrake * brakeForce * 2f;
+                wheelColliders[2].brakeTorque = wheelColliders[3].brakeTorque = brakeTorque;
+            }
 
             for (int i = 0; i < 4; i++)
-                wheelColliders[i].brakeTorque = brakeInput * brakeForce;
+            {
+                float thrustTorque = _verticalInput * (motorForce / 2f);
+                wheelColliders[i].motorTorque = thrustTorque;
+
+                if (Vector3.Angle(transform.forward, rb.velocity) < 50f)
+                    wheelColliders[i].brakeTorque = footbrake * brakeForce;
+                
+                else if (footbrake > 0)
+                {
+                    wheelColliders[i].brakeTorque = 0f;
+                    wheelColliders[i].motorTorque = -footbrake * reverseMotorForce;
+                }
+            }
         }
 
         private void Steer()
