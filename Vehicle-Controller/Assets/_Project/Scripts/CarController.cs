@@ -5,6 +5,7 @@ namespace Gisha.VehiclePrototype
     public class CarController : MonoBehaviour
     {
         [Header("General")]
+        [SerializeField] private float topSpeed;
         [SerializeField] private float motorForce;
         [SerializeField] private float reverseMotorForce;
         [SerializeField] private float brakeForce;
@@ -17,11 +18,11 @@ namespace Gisha.VehiclePrototype
         float _horizontalInput, _verticalInput;
         bool _isHandBraking;
 
-        Rigidbody rb;
+        Rigidbody _rb;
 
         private void Awake()
         {
-            rb = GetComponent<Rigidbody>();
+            _rb = GetComponent<Rigidbody>();
         }
 
         private void FixedUpdate()
@@ -30,6 +31,7 @@ namespace Gisha.VehiclePrototype
 
             Steer();
             HandleMotor();
+            LimitSpeed();
 
             UpdateWheelPoses();
         }
@@ -43,30 +45,44 @@ namespace Gisha.VehiclePrototype
 
         private void HandleMotor()
         {
+            // 0 and 1 are front wheels.
+            float thrustTorque = _verticalInput * motorForce;
+            wheelColliders[0].motorTorque = wheelColliders[1].motorTorque = thrustTorque;
+
+            ApplyBraking();
+        }
+
+        private void ApplyBraking()
+        {
             float footbrake = -1 * Mathf.Clamp(_verticalInput, -1, 0);
             float handbrake = _isHandBraking ? 1f : 0f;
 
-            if (handbrake > 0f)
-            {
-                // 2 and 3 are rear wheels.
-                var brakeTorque = handbrake * brakeForce * 2f;
-                wheelColliders[2].brakeTorque = wheelColliders[3].brakeTorque = brakeTorque;
-            }
-
             for (int i = 0; i < 4; i++)
             {
-                float thrustTorque = _verticalInput * (motorForce / 2f);
-                wheelColliders[i].motorTorque = thrustTorque;
-
-                if (Vector3.Angle(transform.forward, rb.velocity) < 50f)
-                    wheelColliders[i].brakeTorque = footbrake * brakeForce;
-                
-                else if (footbrake > 0)
+                if (handbrake > 0f)
                 {
-                    wheelColliders[i].brakeTorque = 0f;
-                    wheelColliders[i].motorTorque = -footbrake * reverseMotorForce;
+                    var brakeTorque = handbrake * brakeForce;
+                    wheelColliders[i].brakeTorque = brakeTorque;
                 }
+                else
+                    wheelColliders[i].brakeTorque = 0f;
             }
+
+            if (Vector3.Angle(transform.forward, _rb.velocity) < 50f)
+                wheelColliders[0].brakeTorque = wheelColliders[1].brakeTorque = footbrake * brakeForce;
+
+            if (footbrake > 0)
+            {
+                wheelColliders[0].brakeTorque = wheelColliders[1].brakeTorque = 0f;
+                wheelColliders[0].motorTorque = wheelColliders[1].motorTorque = -footbrake * reverseMotorForce;
+            }
+
+        }
+
+        private void LimitSpeed()
+        {
+            if (_rb.velocity.magnitude > topSpeed)
+                _rb.velocity = _rb.velocity.normalized * topSpeed;
         }
 
         private void Steer()
